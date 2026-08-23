@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Kart League - Classifica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">🏁 Good Boy League</div>
+            <p class="tagline">Il campionato ufficiale dei good boys</p>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <button class="nav-item active" data-view="standings">
+            <span class="nav-icon">🏆</span>
+            <span>Classifica</span>
+        </button>
+        <button class="nav-item" data-view="races">
+            <span class="nav-icon">📅</span>
+            <span>Gare</span>
+        </button>
+        <button class="nav-item" data-view="drivers">
+            <span class="nav-icon">👥</span>
+            <span>Piloti</span>
+        </button>
+        <button class="nav-item" data-view="manage-drivers">
+            <span class="nav-icon">⚙️</span>
+            <span>Gestisci Piloti</span>
+        </button>
+        <button class="nav-item" data-view="new-race">
+            <span class="nav-icon">➕</span>
+            <span>Nuova Gara</span>
+        </button>
+    </nav>
+
+    <main class="content">
+        <!-- CLASSIFICA -->
+        <section id="standings" class="view active">
+            <div class="section-header">
+                <h1>Driver Standings</h1>
+                <div class="season-selector">
+                    <select id="seasonSelect"></select>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Total Races</div>
+                    <div class="stat-value" id="totalRaces">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Active Drivers</div>
+                    <div class="stat-value" id="totalDrivers">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Different Tracks</div>
+                    <div class="stat-value" id="totalTracks">0</div>
+                </div>
+            </div>
+
+            <div class="standings-table-wrapper">
+                <table class="standings-table">
+                    <thead>
+                        <tr>
+                            <th class="col-pos">Pos</th>
+                            <th class="col-driver">Driver</th>
+                            <th class="col-races">Races</th>
+                            <th class="col-wins">Wins</th>
+                            <th class="col-podiums">Podiums</th>
+                            <th class="col-points">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standingsBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- GARE -->
+        <section id="races" class="view">
+            <div class="section-header">
+                <h1>Race Calendar</h1>
+                <div class="filters-row">
+                    <select id="filterTrack">
+                        <option value="">All Tracks</option>
+                    </select>
+                    <select id="filterSeason">
+                        <option value="">All Seasons</option>
+                    </select>
+                </div>
+            </div>
+            <div class="races-list" id="racesList"></div>
+        </section>
+
+        <!-- PILOTI -->
+        <section id="drivers" class="view">
+            <div class="section-header">
+                <h1>Drivers</h1>
+            </div>
+            <div class="drivers-grid" id="driversGrid"></div>
+        </section>
+
+        <!-- GESTISCI PILOTI -->
+        <section id="manage-drivers" class="view">
+            <div class="section-header">
+                <h1>Manage Drivers</h1>
+                <button class="btn-primary" id="addNewDriverBtn">+ Add New Driver</button>
+            </div>
+            <div class="drivers-table-wrapper">
+                <table class="standings-table">
+                    <thead>
+                        <tr>
+                            <th class="col-pos">Number</th>
+                            <th class="col-driver">Name</th>
+                            <th class="col-races">Races</th>
+                            <th class="col-wins">Wins</th>
+                            <th class="col-podiums">Podiums</th>
+                            <th class="col-points">Points</th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="manageDriversBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- NUOVA GARA -->
+        <section id="new-race" class="view">
+            <div class="section-header">
+                <h1>Add New Race</h1>
+            </div>
+            <form id="raceForm" class="race-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="raceDate">Date *</label>
+                        <input type="date" id="raceDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="raceTrack">Track *</label>
+                        <input type="text" id="raceTrack" placeholder="e.g. Autodromo di Monza" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="raceSeason">Season</label>
+                        <input type="text" id="raceSeason" placeholder="e.g. 2026" value="2026">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="raceNotes">Notes</label>
+                    <textarea id="raceNotes" placeholder="Weather conditions, special events..." rows="2"></textarea>
+                </div>
+
+                <h3 class="subsection-title">Race Results</h3>
+                <div class="results-header">
+                    <div class="col-pos">#</div>
+                    <div class="col-driver">Driver</div>
+                    <div class="col-position">Position</div>
+                    <div class="col-fastest">Fastest Lap</div>
+                    <div class="col-points">Points</div>
+                </div>
+                <div id="resultsContainer"></div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-outline" id="addDriverBtn">+ Add Driver</button>
+                    <button type="submit" class="btn-primary">Save Race</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- MODAL DETTAGLIO/MODIFICA GARA -->
+    <div id="raceModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modalTitle">Race Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn-danger" id="deleteRaceBtn">🗑️ Delete Race</button>
+                <button class="btn-secondary" id="editRaceBtn">✏️ Edit Race</button>
+                <button class="btn-primary" id="closeModalBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITOR GARA -->
+    <div id="editModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container modal-large">
+            <div class="modal-header">
+                <h2>Edit Race</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editRaceForm" class="race-form">
+                    <input type="hidden" id="editRaceId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editRaceDate">Date *</label>
+                            <input type="date" id="editRaceDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRaceTrack">Track *</label>
+                            <input type="text" id="editRaceTrack" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRaceSeason">Season</label>
+                            <input type="text" id="editRaceSeason" value="2026">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRaceNotes">Notes</label>
+                        <textarea id="editRaceNotes" rows="2"></textarea>
+                    </div>
+
+                    <h3 class="subsection-title">Results</h3>
+                    <div class="results-header">
+                        <div class="col-pos">#</div>
+                        <div class="col-driver">Driver</div>
+                        <div class="col-position">Position</div>
+                        <div class="col-fastest">Fastest Lap</div>
+                        <div class="col-points">Points</div>
+                    </div>
+                    <div id="editResultsContainer"></div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-outline" id="editAddDriverBtn">+ Add Driver</button>
+                        <button type="submit" class="btn-primary">Update Race</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AGGIUNGI/MODIFICA PILOTA -->
+    <div id="driverModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="driverModalTitle">Add Driver</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="driverForm" class="race-form">
+                    <input type="hidden" id="editDriverId">
+                    <div class="form-group">
+                        <label for="driverName">Name *</label>
+                        <input type="text" id="driverName" placeholder="e.g. Max Verstappen" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="driverNumber">Number</label>
+                        <input type="number" id="driverNumber" placeholder="e.g. 1" min="1" max="99">
+                    </div>
+                    <div class="form-actions" style="margin-top:20px;">
+                        <button type="submit" class="btn-primary">Save Driver</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>F1 Kart League © 2026 | Powered by GitHub Pages</p>
+        </div>
+    </footer>
+    
+    <script src="firebase-config.js" type="module"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
